@@ -17,8 +17,8 @@ router.get('/', (req, res) =>{
 
 //LOGIN ISNT WORKING UNLESS I REMOVE authenticate FROM DASHBOARD ENDPOINT
 
-// router.get('/dashboard/:id', authenticate, async (req,res) =>{
-router.get('/dashboard/:id',  async (req,res) =>{
+router.get('/dashboard/:id', authenticate, async (req,res) =>{
+//router.get('/dashboard/:id',  async (req,res) =>{
 
     const {id} = req.params
     

@@ -10,6 +10,27 @@ module.exports = {
         },
         seeds:{
             directory:"./utils/data/seeds"
+        },
+
+        pool: {
+            afterCreate: (conn, done) => {
+              conn.run("PRAGMA foreign_keys = ON", done); // enforce FK
+            }
+          }
+    },
+
+     production: {
+        client: "pg",
+        connection: process.env.DATABASE_URL || {
+        database: "my_db",
+        user: "username",
+        password: "password"
+        },
+        migrations: {
+        directory: "./data/migrations"
+        },
+        seeds: {
+        directory: "./data/seeds"
         }
-    }
+  }
 }
