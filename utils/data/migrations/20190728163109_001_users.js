@@ -7,8 +7,17 @@ exports.up = function(knex) {
 
       tbl.string('password', 255).notNullable();
   })
+
+  .createTable('plants', tbl =>{
+    tbl.increments();
+    tbl.string('name')
+      .unique()
+      .notNullable();
+  })
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('users');
+  return knex.schema
+  .dropTableIfExists('users')
+  .dropTableIfExists('plants');
 };
