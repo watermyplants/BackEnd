@@ -1,4 +1,6 @@
 
 
 const server = require('./utils/server');
-server.listen(5000, () => console.log('water my plants'))
+const port = 5050;
+
+server.listen(port, () => console.log('water my plants'))

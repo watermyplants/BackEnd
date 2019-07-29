@@ -1,10 +1,13 @@
 const express = require('express');
-
 const server = express();
+const cors = require('cors');
 
-server.get('/', (req, res) =>{
-    res.send('<h1>Water my plants</h1>')
-})
+const UserRouter = require('../utils/resources/users/users-router');
+
+
+
+server.use(cors())
+server.use('/', UserRouter);
 
 
 
