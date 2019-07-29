@@ -14,18 +14,14 @@ router.get('/', (req, res) =>{
 
 
 
-
-//LOGIN ISNT WORKING UNLESS I REMOVE authenticate FROM DASHBOARD ENDPOINT
-
-router.get('/dashboard/:id', authenticate, async (req,res) =>{
-//router.get('/dashboard/:id',  async (req,res) =>{
+//router.get('/dashboard/:id', authenticate, async (req,res) =>{
+router.get('/dashboard/:id',  async (req,res) =>{
 
     const {id} = req.params
     
     try{
-        const user = await Users.getUserBy({id})
+        const user = await Users.getPlants()
         res.status(200).json(user)
-        //const dashboard = getUserDash()
     }catch(error){
         res.status(500).json(error)
     }
@@ -55,9 +51,8 @@ router.post('/login', async (req, res)=>{
         try{
             const user = await Users.login(req.body);
             if(user){
-                console.log('i am user')
+                res.status(200).json(user)
             }
-            res.status(200).json(user)
             
         }catch(error){
             res.status(500).json({error:"could not login"})

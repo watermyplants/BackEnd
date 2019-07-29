@@ -8,7 +8,8 @@ module.exports = {
     register,
     login,
     getUserBy,
-    getUsers
+    getUsers,
+    getPlants
 }
 
 
@@ -23,9 +24,7 @@ function login(data){
     const {username,password} = data;
 
     return getUserBy({username}).then(user =>{
-        console.log(user)
         if(user && bcrypt.compareSync(password, user.password)){
-            console.log('all passes')
             const token = generateToken(user);
             return {
                 id:user.id,
@@ -48,6 +47,10 @@ function getUserBy(filter){
             }
         })
 }
+
+function getPlants(){
+    return db('plants')
+ }
 
 function getUsers(){
     return db('users');
