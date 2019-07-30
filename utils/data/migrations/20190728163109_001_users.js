@@ -26,7 +26,7 @@ exports.up = function(knex) {
   .createTable('schedule', tbl =>{
     tbl.increments();
 
-    tbl.decimal('plant_id')
+    tbl.float('plant_id')
       .notNullable()
       .references('id')
       .inTable('plants')
