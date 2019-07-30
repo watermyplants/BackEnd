@@ -6,12 +6,34 @@ exports.up = function(knex) {
       tbl.string('username', 255).unique().notNullable();
 
       tbl.string('password', 255).notNullable();
-  })
 
+      tbl.string('phone' , 64)
+        .notNullable();
+
+
+  })
   .createTable('plants', tbl =>{
     tbl.increments();
-    tbl.string('name')
-      .unique()
+
+    tbl.string('name', 255).notNullable();
+
+    tbl.float('user_id', 255).notNullable()
+        .references('id').inTable('users')
+        .onUpdate('CASCADE')
+      .onDelete('CASCADE');
+  })
+
+  .createTable('schedule', tbl =>{
+    tbl.increments();
+
+    tbl.decimal('plant_id')
+      .notNullable()
+      .references('id')
+      .inTable('plants')
+      .onUpdate('CASCADE')
+      .onDelete('CASCADE');
+
+    tbl.string('water_schedule')
       .notNullable();
   })
 };
@@ -19,5 +41,6 @@ exports.up = function(knex) {
 exports.down = function(knex) {
   return knex.schema
   .dropTableIfExists('users')
-  .dropTableIfExists('plants');
+  .dropTableIfExists('plants')
+  .dropTableIfExists('schedule');
 };
