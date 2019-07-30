@@ -7,7 +7,7 @@ exports.up = function(knex) {
 
       tbl.string('password', 255).notNullable();
 
-      tbl.float('phone' , 64)
+      tbl.int('phone' , 64)
         .notNullable();
 
 
@@ -17,7 +17,7 @@ exports.up = function(knex) {
 
     tbl.string('name', 255).notNullable();
 
-    tbl.float('user_id', 255).notNullable()
+    tbl.int('user_id', 255).notNullable()
         .references('id').inTable('users')
         .onUpdate('CASCADE')
       .onDelete('CASCADE');
@@ -26,7 +26,7 @@ exports.up = function(knex) {
   .createTable('schedule', tbl =>{
     tbl.increments();
 
-    tbl.float('plant_id')
+    tbl.int('plant_id')
       .notNullable()
       .references('id')
       .inTable('plants')
