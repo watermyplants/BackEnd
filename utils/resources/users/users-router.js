@@ -31,14 +31,13 @@ router.get('/dashboard/:id', authenticate, async (req,res) =>{
 });
 
 router.post('/register', async (req,res) =>{
-    const {username, password} = req.body;
-    if(!username || !password){
-        res.status(400).json({error:"require username and password"})
+    const {username, password, phone} = req.body;
+    if(!username || !password || !phone){
+        res.status(400).json({error:"require username, password, and phone number"})
     }else{
         try{
-            const [id] = await Users.register(req.body);
-            const newRegister = await Users.getUserBy({id});
-            res.status(200).json(newRegister)
+            const user =  await Users.register(req.body);
+            res.status(200).json(user)
             
         }catch(error){
             res.status(500).json({error:"could not register"})

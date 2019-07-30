@@ -1,6 +1,7 @@
 
 const db = require('../../data/dbConfig')
 const bcrypt = require('bcryptjs');
+const hash = require('../../auth/hash')
 const generateToken = require('../../auth/generate-token')
 
 
@@ -10,27 +11,20 @@ module.exports = {
     getUserBy,
     getUsers,
     getPlants,
-    addPlant,
-    findById
+    addPlant
 }
+
 
 
 async function register(data){
     const {password} = data;
-    const hash = bcrypt.hashSync(password, 12);
-    data.password = hash;
+    data.password = hash(password);
 
-
-    const [id] = await db('users').insert(data, 'id');
-    return findById(id);
+    const [id] = await  db('users').insert(data, 'id')
+    const user = await getUserBy({id});
+    
+    return user;
 }
-
-
-function findById(id) {
-    return db('users')
-      .where({ id })
-      .first();
-  }
 
 function login(data){
     const {username,password} = data;
