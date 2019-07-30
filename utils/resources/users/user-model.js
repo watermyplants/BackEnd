@@ -9,7 +9,8 @@ module.exports = {
     login,
     getUserBy,
     getUsers,
-    getPlants
+    getPlants,
+    addPlant
 }
 
 
@@ -17,7 +18,9 @@ function register(data){
     const {password} = data;
     const hash = bcrypt.hashSync(password, 12);
     data.password = hash;
-    return db('users').insert(data);
+
+
+    return db('users').insert(data, 'id');
 }
 
 function login(data){
@@ -48,10 +51,18 @@ function getUserBy(filter){
         })
 }
 
-function getPlants(){
-    return db('plants')
+function getPlants(id){
+    return db('plants as p')
+    .innerJoin('users as u', 'u.id', 'p.user_id')
+    .leftJoin('schedule as s', 's.plant_id', 'p.id' )
+    .select('p.name', 's.water_schedule')
+    .where({user_id: id})
  }
 
 function getUsers(){
     return db('users');
+}
+
+function addPlant(data){
+    return db('plants').insert(data);
 }
