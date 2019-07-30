@@ -10,18 +10,27 @@ module.exports = {
     getUserBy,
     getUsers,
     getPlants,
-    addPlant
+    addPlant,
+    findById
 }
 
 
-function register(data){
+async function register(data){
     const {password} = data;
     const hash = bcrypt.hashSync(password, 12);
     data.password = hash;
 
 
-    return db('users').insert(data, 'id');
+    const [id] = await db('users').insert(data, 'id');
+    return findById(id);
 }
+
+
+function findById(id) {
+    return db('users')
+      .where({ id })
+      .first();
+  }
 
 function login(data){
     const {username,password} = data;
