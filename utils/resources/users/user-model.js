@@ -15,7 +15,8 @@ module.exports = {
     updatePlant,
     getPlant,
     updatePlant,
-    deletePlant
+    deletePlant,
+    updateUser
 }
 
 
@@ -117,6 +118,11 @@ async function updatePlant(data, id){
 
 
 async function deletePlant(id){
-    console.log(id)
     return await db('plants').where({id}).del();
+}
+
+async function updateUser(data, id){
+    await db('users').update(data, 'id').where({id});
+    const user = await getUserBy({id});
+    return user;
 }
