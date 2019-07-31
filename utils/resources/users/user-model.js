@@ -48,10 +48,8 @@ function login(data){
 
 async function addPlant(data, user){
     const added = {
-        user_id:id,
-        name:data.name,
-        location:data.location,
-        type:data.type
+        ...data,
+        user_id:user
     }
     const [id] =  await db('plants').insert(added, 'id');
     const plant = await findPlantBy({id})
