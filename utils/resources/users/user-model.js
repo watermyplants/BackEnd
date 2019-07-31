@@ -46,17 +46,13 @@ function login(data){
     ;
 }
 
-async function addPlant(data, id){
-    const added = {
-        ...data,
-        user_id:id
-    }
-    const [id] =  await db('plants').insert(added, 'id');
+
+async function addPlant(data, user){
+    const [id] =  await db('plants').insert({...data, user_id:user}, 'id');
     const plant = await findPlantBy({id})
     return plant
    
 }
-
 function getUserBy(filter){
    return db('users').first()
         .where(filter).then( user =>{
