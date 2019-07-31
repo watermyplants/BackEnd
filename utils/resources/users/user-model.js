@@ -46,6 +46,13 @@ function login(data){
     ;
 }
 
+async function addPlant(data, user){
+    console.log('Heroku')
+    const [id] =  await db('plants').insert({...data, user_id:user}, 'id');
+    const plant = await findPlantBy({id})
+    return plant
+   
+}
 
 function getUserBy(filter){
    return db('users').first()
@@ -84,12 +91,6 @@ function findPlantBy(filter){
         });
 }
 
-async function addPlant(data, user){
-    const [id] =  await db('plants').insert({...data, user_id:user}, 'id');
-    const plant = await findPlantBy({id})
-    return plant
-   
-}
 
 
 function getPlant(id){
