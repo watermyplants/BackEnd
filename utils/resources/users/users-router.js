@@ -106,6 +106,22 @@ router.put('/dashboard/:id/my_plant/:plant_id/update',authenticate, async (req,r
     }
 })
 
+router.put('/dashboard/:id/user_settings',authenticate, async (req,res) =>{
+    const {phone} = req.body;
+    const {id} = req.params;
+    if(!phone){
+        res.status(400).json({error:"please add a phone number"})
+    }else{
+
+        try{
+            const updated = await Users.updateUser(req.body,id);
+            res.status(201).json(updated)
+        }catch(error){
+            res.status(500).json({error:"could not update phone number"})
+        }
+    }
+})
+
 
 router.delete('/dashboard/:id/my_plant/:plant_id/remove', authenticate, async (req,res) =>{
     const {plant_id} =  req.params;
