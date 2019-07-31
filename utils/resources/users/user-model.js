@@ -11,7 +11,11 @@ module.exports = {
     getUserBy,
     getUsers,
     getPlants,
-    addPlant
+    addPlant,
+    updatePlant,
+    getPlant,
+    updatePlant,
+    deletePlant
 }
 
 
@@ -22,7 +26,7 @@ async function register(data){
 
     const [id] = await  db('users').insert(data, 'id')
     const user = await getUserBy({id});
-    
+
     return user;
 }
 
@@ -55,17 +59,60 @@ function getUserBy(filter){
 }
 
 function getPlants(id){
-    return db('plants as p')
-    .innerJoin('users as u', 'u.id', 'p.user_id')
-    .leftJoin('schedule as s', 's.plant_id', 'p.id' )
-    .select('p.name', 's.water_schedule')
+    return db('plants')
     .where({user_id: id})
+
+    // return db('plants as p')
+    // .innerJoin('users as u', 'u.id', 'p.user_id')
+    // .leftJoin('schedule as s', 's.plant_id', 'p.id' )
+    // .select('p.name', 's.water_schedule')
+    // .where({user_id: id})
  }
 
 function getUsers(){
     return db('users');
 }
 
-function addPlant(data){
-    return db('plants').insert(data);
+function findPlantBy(filter){
+    return db('plants').first()
+        .where(filter).then( plant =>{
+            if(plant){
+                return plant;
+            }else{
+                return null
+            }
+        });
+}
+
+async function addPlant(data, user){
+    const [id] =  await db('plants').insert({...data, user_id:user}, 'id');
+    const plant = await findPlantBy({id})
+    return plant
+   
+}
+
+
+function getPlant(id){
+   return db('plants').first()
+        .where({id}).then(plant =>{
+            if(plant){
+                return plant
+            }else{
+                return null;
+            }
+        })
+}
+
+
+async function updatePlant(data, id){
+    await db('plants').update(data, 'id')
+        .where({id});
+    const plant = await getPlant(id)
+    return plant
+}
+
+
+async function deletePlant(id){
+    console.log(id)
+    return await db('plants').where({id}).del();
 }
