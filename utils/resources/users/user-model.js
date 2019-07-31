@@ -47,8 +47,13 @@ function login(data){
 }
 
 async function addPlant(data, user){
-    console.log('Heroku')
-    const [id] =  await db('plants').insert({...data, user_id:user}, 'id');
+    const added = {
+        user_id:id,
+        name:data.name,
+        location:data.location,
+        name:data.name
+    }
+    const [id] =  await db('plants').insert(added, 'id');
     const plant = await findPlantBy({id})
     return plant
    
