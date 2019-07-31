@@ -52,8 +52,8 @@ async function addPlant(data, user){
         user_id:user
     }
     //const [id] =  await db('plants').insert(added, 'id');
-    //const plant = await findPlantBy({id})
-    return added
+    const plant = await findPlantBy({id:user})
+    return plant
    
 }
 
