@@ -91,6 +91,7 @@ router.post('/dashboard/:id/plants/add', authenticate, async (req, res)=>{
             
         }catch(error){
             res.status(500).json(error)
+            //res.status(500).json({error:"could not add plant"})
         }
     }
 });
