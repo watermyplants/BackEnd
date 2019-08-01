@@ -1,4 +1,22 @@
-# BackEnd
+# BackEnd Water My Plants
+
+
+
+
+
+##Description
+
+
+#Instructions
+**  Pl  **
+
+
+## Project Steps
+
+
+
+## Minimum Viable Product
+
 
 
 ## end points
@@ -15,3 +33,47 @@
 `https://watermp.herokuapp.com/dashboard/:id`
 
 **Requirements** `url id, token`
+
+
+| POST | REGISTER | 
+```'https://watermp.herokuapp.com/register'```
+
+
+| POST | LOGIN | 
+```'https://watermp.herokuapp.com/login'```
+
+
+
+| GET | DASHBOARD |  
+```'https://watermp.herokuapp.com/dashboard/:id'```
+
+
+| POST | ADD PLANT |  
+```'https://watermp.herokuapp.com/dashboard/:id/plants/add'```
+
+
+| POST | ADD A SCHEDULE |  
+```'https://watermp.herokuapp.com/dashboard/:id/my_plant/:plant_id/add_schedule'```
+
+| GET | USER SINGLE PLANT | 
+```'https://watermp.herokuapp.com/dashboard/:id/my_plant/:plant_id'```
+
+
+| GET | ALL SCHEDULES FOR A PLANT |  
+```'https://watermp.herokuapp.com/dashboard/:id/my_plant/:plant_id/schedules'```
+
+| PUT | UPDATE PLANT |   
+```'https://watermp.herokuapp.com/dashboard/:id/my_plant/:plant_id/update'```
+
+| PUT | UPDATE USER |  
+```'https://watermp.herokuapp.com/dashboard/:id/user_settings'```
+
+| PUT | UPDATE A SCHEDULE | 
+```'https://watermp.herokuapp.com/dashboard/:id/my_plant/:plant_id/update/:sch_id'```
+
+| DEETE | PLANT | 
+```'https://watermp.herokuapp.com/dashboard/:id/my_plant/:plant_id/remove'```
+
+
+| DELETE | SCHEDULE |   
+```'https://watermp.herokuapp.com/dashboard/:id/my_plant/:plant_id/remove/:sch_id'```
