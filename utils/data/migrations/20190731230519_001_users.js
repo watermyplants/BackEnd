@@ -1,7 +1,7 @@
 
 exports.up = function(knex) {
     return knex.schema
-    .dropTableIfExists('users').createTable('users', tbl =>{
+    .createTable('users', tbl =>{
         tbl.increments();
   
         tbl.string('username', 255).unique().notNullable();
@@ -13,20 +13,22 @@ exports.up = function(knex) {
   
   
     })
-    .dropTableIfExists('plants').createTable('plants', tbl =>{
+    .createTable('plants', tbl =>{
       tbl.increments();
   
       tbl.string('name', 255).notNullable();
       tbl.string('type', 255).notNullable();
       tbl.string('location', 255).notNullable();
   
-      tbl.integer('user_id', 255).notNullable()
-          .references('id').inTable('users')
+      tbl.integer('user_id', 255)
+          .notNullable()
+          .references('id')
+          .inTable('users')
           .onUpdate('CASCADE')
-        .onDelete('CASCADE');
+          .onDelete('CASCADE');
     })
   
-    .dropTableIfExists('schedule').createTable('schedule', tbl =>{
+    .createTable('schedule', tbl =>{
       tbl.increments();
   
       tbl.integer('plant_id')
@@ -50,7 +52,7 @@ exports.up = function(knex) {
   
   exports.down = function(knex) {
     return knex.schema
-    .dropTableIfExists('users')
+    .dropTableIfExists('schedule')
     .dropTableIfExists('plants')
-    .dropTableIfExists('schedule');
+    .dropTableIfExists('users');
   };
