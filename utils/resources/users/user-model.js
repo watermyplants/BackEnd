@@ -16,58 +16,29 @@ module.exports = {
     getPlant,
     updatePlant,
     deletePlant,
-    updateUser
+    updateUser,
+    addSchedule
 }
 
 
 
-async function register(data){
-    const {password} = data;
-    data.password = hash(password);
 
-    const [id] = await  db('users').insert(data, 'id')
-    const user = await getUserBy({id});
-
-    return user;
-}
-
-function login(data){
-    const {username,password} = data;
-
-    return getUserBy({username}).then(user =>{
-        if(user && bcrypt.compareSync(password, user.password)){
-            const token = generateToken(user);
-            return {
-                id:user.id,
-                username:username,
-                token:token
-            }
-        }
-    });
-    ;
-}
-
-
-async function addPlant(data, user){
-    const addedPlant = {
-        ...data,
-        user_id:user
-    }
-    const [id] =  await db('plants').insert(addedPlant, 'id');
-    const plant = await findPlantBy({id})
-    return plant;
-   
-}
+////////GETS
+////////GETS
+////////GETS
+////////GETS
 function getUserBy(filter){
-   return db('users').first()
-        .where(filter).then( user =>{
-            if (user){
-                return user;
-            }else{
-                return null
-            }
-        })
+    return db('users').first()
+    .where(filter).then( user =>{
+        if (user){
+            return user;
+        }else{
+            return null
+        }
+    })
 }
+
+
 
 function getPlants(id){
     return db('plants')
@@ -108,7 +79,81 @@ function getPlant(id){
         })
 }
 
+function findSchedule(filter){
+    return db('schedule').first()
+        .where(filter).then(schedule =>{
+            if(schedule){
+                return schedule;
+            }else{
+                return null;
+            }
+        })
+}
 
+////////POSTS
+////////POSTS
+////////POSTS
+////////POSTS
+
+
+async function register(data){
+    const {password} = data;
+    data.password = hash(password);
+
+    const [id] = await  db('users').insert(data, 'id')
+    const user = await getUserBy({id});
+
+    return user;
+}
+
+function login(data){
+    const {username,password} = data;
+
+    return getUserBy({username}).then(user =>{
+        if(user && bcrypt.compareSync(password, user.password)){
+            const token = generateToken(user);
+            return {
+                id:user.id,
+                username:username,
+                token:token
+            }
+        }
+    });
+    ;
+}
+
+
+
+async function addPlant(data, user){
+    const addedPlant = {
+        ...data,
+        user_id:user
+    }
+    const [id] =  await db('plants').insert(addedPlant, 'id');
+    const plant = await findPlantBy({id})
+    return plant;
+   
+}
+
+async function addSchedule(data, user, plant){
+
+    const scheduleData = {
+        ...data,
+        plant_id:plant,
+        user_id:user
+    }
+
+    const [id] = await db('schedule').insert(scheduleData, 'id');
+    const schedule = await findSchedule({id});
+    return schedule;
+}
+
+//////UPDATES
+//////UPDATES
+//////UPDATES
+//////UPDATES
+//////UPDATES
+//////UPDATES
 async function updatePlant(data, id){
     await db('plants').update(data, 'id')
         .where({id});
@@ -117,12 +162,20 @@ async function updatePlant(data, id){
 }
 
 
-async function deletePlant(id){
-    return await db('plants').where({id}).del();
-}
-
 async function updateUser(data, id){
     await db('users').update(data, 'id').where({id});
     const user = await getUserBy({id});
     return user;
+}
+
+
+// DELETES
+// DELETES
+// DELETES
+// DELETES
+// DELETES
+// DELETES
+// DELETES
+async function deletePlant(id){
+    return await db('plants').where({id}).del();
 }

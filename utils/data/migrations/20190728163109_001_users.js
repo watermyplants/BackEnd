@@ -35,6 +35,13 @@ exports.up = function(knex) {
       .onUpdate('CASCADE')
       .onDelete('CASCADE');
 
+    tbl.integer('user_id')
+      .notNullable()
+      .references('id')
+      .inTable('users')
+      .onUpdate('CASCADE')
+      .onDelete('CASCADE');
+
     tbl.string('water_schedule')
       .notNullable();
   })
