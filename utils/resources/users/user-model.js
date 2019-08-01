@@ -41,14 +41,14 @@ function getUserBy(filter){
 
 
 function getPlants(id){
-    return db('plants')
-    .where({user_id: id})
-
-    // return db('plants as p')
-    // .innerJoin('users as u', 'u.id', 'p.user_id')
-    // .leftJoin('schedule as s', 's.plant_id', 'p.id' )
-    // .select('p.name', 's.water_schedule')
+    // return db('plants')
     // .where({user_id: id})
+
+    return db('plants as p')
+     .innerJoin('users as u', 'u.id', 'p.user_id')
+     //.leftJoin('schedule as s', 's.plant_id', 'p.id' )
+     .select('p.name', 'p.type')
+    .where({user_id: id})
  }
 
 function getUsers(){
