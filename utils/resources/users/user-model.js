@@ -20,7 +20,8 @@ module.exports = {
     addSchedule,
     getScedules,
     findPlantBy,
-    deleteSchedule
+    deleteSchedule,
+    updateSchedule
 }
 
 
@@ -168,6 +169,12 @@ async function updateUser(data, id){
     await db('users').update(data, 'id').where({id});
     const user = await getUserBy({id});
     return user;
+}
+
+async function updateSchedule(data, id){
+    await db('schedule').update(data, 'id').where({id});
+    const schedule = await findSchedule({id});
+    return schedule;
 }
 
 

@@ -169,9 +169,22 @@ router.put('/dashboard/:id/user_settings',authenticate, async (req,res) =>{
     }
 })
 
+router.put('/dashboard/:id/my_plant/:plant_id/update/:sch_id', authenticate, UserOwnsPlant, async (req,res) =>{
+    const {sch_id} =  req.params;
+    console.log(sch_id)
+    try{
+        const updated = await Users.updateSchedule(req.body, sch_id);
+        res.status(201).json(updated)
+        
+    }catch(error){
+        res.status(500).json({error:"could not update schedule"})
+    }
+})
+
 
 router.delete('/dashboard/:id/my_plant/:plant_id/remove', authenticate, UserOwnsPlant, async (req,res) =>{
     const {plant_id} =  req.params;
+
     try{
         const remove = await Users.deletePlant(plant_id);
         res.status(200).end()
@@ -181,7 +194,7 @@ router.delete('/dashboard/:id/my_plant/:plant_id/remove', authenticate, UserOwns
     }
 })
 
-router.post('/dashboard/:id/my_plant/:plant_id/remove/:sch_id', authenticate, UserOwnsPlant, async (req,res) =>{
+router.delete('/dashboard/:id/my_plant/:plant_id/remove/:sch_id', authenticate, UserOwnsPlant, async (req,res) =>{
     const schedule_id =  req.params.sch_id;
     try{
         const remove = await Users.deleteSchedule(schedule_id);
@@ -229,6 +242,9 @@ router.post('/dashboard/:id/my_plant/:plant_id/remove/:sch_id', authenticate, Us
 
 //PUT Update User Phonenumber  
 //```'https://watermp.herokuapp.com/dashboard/:id/user_settings'```
+
+//PUT Update Schedule 
+//```'https://watermp.herokuapp.com/dashboard/:id/my_plant/:plant_id/update/:sch_id'```
 
 //DELETE A plant  
 //```'https://watermp.herokuapp.com/dashboard/:id/my_plant/:plant_id/remove'```
