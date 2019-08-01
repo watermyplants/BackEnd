@@ -17,7 +17,7 @@ exports.up = function(knex) {
       tbl.increments();
   
       tbl.string('name', 255).notNullable();
-      tbl.string('type', 255).unique().notNullable();
+      tbl.string('type', 255).notNullable();
       tbl.string('location', 255).notNullable();
   
       tbl.integer('user_id', 255).notNullable()
