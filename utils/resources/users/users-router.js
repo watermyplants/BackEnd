@@ -90,11 +90,31 @@ router.post('/dashboard/:id/plants/add', authenticate, async (req, res)=>{
             
             
         }catch(error){
-            res.status(500).json(error)
-            //res.status(500).json({error:"could not add plant"})
+            res.status(500).json({error:"could not add plant"})
         }
     }
 });
+
+
+router.post('/dashboard/:id/my_plant/:plant_id/add_schedule', async (req, res)=>{
+    const {water_schedule} = req.body;
+    const {id,plant_id} = req.params;
+
+    console.log(water_schedule)
+    if(!water_schedule){
+        res.status(400).json({error:"please add a water schedule"})
+    }else{
+        try{
+            const schedule = await Users.addSchedule(req.body, id, plant_id);
+            if(schedule){
+                res.status(200).json(schedule)
+            }
+            
+        }catch(error){
+            res.status(500).json({error:"could not add schedule"})
+        }
+    }
+})
 
 router.put('/dashboard/:id/my_plant/:plant_id/update',authenticate, async (req,res) =>{
     const {plant_id} = req.params;
@@ -133,6 +153,81 @@ router.delete('/dashboard/:id/my_plant/:plant_id/remove', authenticate, async (r
     }catch(error){
         res.status(500).json({error:"could not delete plant"})
     }
+})
+
+router.delete('/dashboard/:id/my_plant/:plant_id/add_schedule', authenticate, async (req,res) =>{
+    const {plant_id} =  req.params;
+    console.log(plant_id)
+    try{
+        const remove = await Users.deletePlant(plant_id);
+        res.status(200).end()
+        
+    }catch(error){
+        res.status(500).json({error:"could not delete plant"})
+    }
+})
+
+router.get('/trial', (req, res) =>{
+
+    console.log(new Date())
+    console.log(new Date().getDay())
+    console.log(new Date().getFullYear())
+    console.log(new Date().getMonth())
+    console.log(new Date().getDate())
+    console.log(new Date().getTime()) /// retuns long interger
+    console.log(Date.now()) /// retuns long interger
+    //console.log(Date().getTime())
+
+
+
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+    console.log(monthNames[new Date().getMonth()])
+    
+    const nextMonth = new Date().getMonth() + 1;
+    console.log(monthNames[nextMonth])
+
+
+    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "June",
+  "Friday", "Saturday"];
+
+
+  const tryAgainst = 9;
+  //if(tryAgainst > )
+
+  const currentDay = dayNames[new Date().getDay() + 7]
+  console.log(currentDay);
+
+
+  let d = new Date("August 8, 2019 00:00:00");
+  let n = d.getTime();
+  console.log(n)
+
+  const milsec= 86400000
+  const intval = 3 ;
+  const schedule = milsec * intval;
+  console.log(schedule)
+
+  const waterOn = new Date( new Date().getTime() + schedule);
+  console.log(waterOn)
+
+//   let newf = {...dayNames, name:'GerDay'};
+  dayNames.push('Gerday');
+
+  console.log(dayNames);
+
+
+
+  var dated = new Date();
+dated.setDate(d.getDate() + ((5 + 7 - d.getDay()) % 7) -7 );
+console.log(dated);
+
+
+let daySelected0
+
+    res.status(200).json({mesage:"trial"})
 })
 
 
