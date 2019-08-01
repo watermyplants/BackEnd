@@ -37,15 +37,34 @@ router.get('/dashboard/:id', authenticate, async (req,res) =>{
     
 });
 
+
+//get individual plant
 router.get('/dashboard/:id/my_plant/:plant_id', authenticate, UserOwnsPlant, async (req,res) =>{
     const {plant_id}= req.params;
+    const id = plant_id;
+    console.log(id)
     try{
-            const plant = await Users.getPlant(plant_id);
+            const plant = await Users.getPlant({id});
             res.status(200).json(plant)
 
     }catch(error){
         res.status(500).json({error:"could not retreive plant"})
     }
+})
+
+//workd
+router.get('/dashboard/:id/my_plant/:plant_id/schedules', authenticate, UserOwnsPlant, async (req, res)=>{
+    const {id,plant_id} = req.params;
+
+        try{
+            const schedule = await Users.getScedules(plant_id);
+            if(schedule){
+                res.status(200).json(schedule)
+            }
+            
+        }catch(error){
+            res.status(500).json({error:"could not add schedule"})
+        }
 })
 
 router.post('/register', async (req,res) =>{
@@ -162,7 +181,7 @@ router.delete('/dashboard/:id/my_plant/:plant_id/remove', authenticate, UserOwns
     }
 })
 
-router.post('/dashboard/:id/my_plant/:plant_id/delete/:sch_id', authenticate, UserOwnsPlant, async (req,res) =>{
+router.post('/dashboard/:id/my_plant/:plant_id/remove/:sch_id', authenticate, UserOwnsPlant, async (req,res) =>{
     const schedule_id =  req.params.sch_id;
     try{
         const remove = await Users.deleteSchedule(schedule_id);
@@ -172,6 +191,64 @@ router.post('/dashboard/:id/my_plant/:plant_id/delete/:sch_id', authenticate, Us
         res.status(500).json({error:"could not schedule"})
     }
 })
+
+
+
+
+
+//REGISTER  
+//```'https://watermp.herokuapp.com/register'```
+
+
+//LOGIN  
+//```'https://watermp.herokuapp.com/login'```
+
+
+
+//DASHBOARD  
+//```'https://watermp.herokuapp.com/dashboard/:id'```
+
+
+//Add PLANT  
+//```'https://watermp.herokuapp.com/dashboard/:id/plants/add'```
+
+
+//Add SCHEDULE  
+//```'https://watermp.herokuapp.com/dashboard/:id/my_plant/:plant_id/add_schedule'```
+
+//GET single plant 
+//```'https://watermp.herokuapp.com/dashboard/:id/my_plant/:plant_id'```
+
+
+//GET All Schedules for a plant  
+//```'https://watermp.herokuapp.com/dashboard/:id/my_plant/:plant_id/schedules'```
+
+//PUT Update A Plant  
+//```'https://watermp.herokuapp.com/dashboard/:id/my_plant/:plant_id/update'```
+
+
+//PUT Update User Phonenumber  
+//```'https://watermp.herokuapp.com/dashboard/:id/user_settings'```
+
+//DELETE A plant  
+//```'https://watermp.herokuapp.com/dashboard/:id/my_plant/:plant_id/remove'```
+
+
+//DELETE A Schedule  
+//```'https://watermp.herokuapp.com/dashboard/:id/my_plant/:plant_id/remove/:sch_id'```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
