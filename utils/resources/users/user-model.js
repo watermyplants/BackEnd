@@ -70,8 +70,9 @@ function findPlantBy(filter){
 
 
 function getPlant(filter){
+    console.log(filter)
    return db('plants').first()
-        .where({filter}).then(plant =>{
+        .where(filter).then(plant =>{
             if(plant){
                 return plant
             }else{
@@ -158,7 +159,7 @@ async function addSchedule(data, user, plant){
 async function updatePlant(data, id){
     await db('plants').update(data, 'id')
         .where({id});
-    const plant = await getPlant(id)
+    const plant = await getPlant({id})
     return plant
 }
 
