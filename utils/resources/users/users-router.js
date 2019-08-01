@@ -3,7 +3,7 @@ const router = express.Router();
 const Users = require('./user-model');
 const db = require('../../data/dbConfig')
 
-const {authenticate, UserOwnsPlant} = require('../../auth/authenticate')
+const {authenticate, UserOwnsPlant, duplicateCheck} = require('../../auth/authenticate')
 
 
 
@@ -69,6 +69,7 @@ router.post('/login', async (req, res)=>{
         res.status(400).json({error:"require username and password"})
     }else{
         try{
+            console.log('try')
             const user = await Users.login(req.body);
             if(user){
                 res.status(200).json(user)
@@ -85,7 +86,7 @@ router.post('/login', async (req, res)=>{
 })
 
 
-router.post('/dashboard/:id/plants/add', authenticate, async (req, res)=>{
+router.post('/dashboard/:id/plants/add', authenticate, duplicateCheck, async (req, res)=>{
     const {id} = req.params;
     const {name, location, type} = req.body;
     if(!name, !location, !type){
@@ -172,17 +173,6 @@ router.post('/dashboard/:id/my_plant/:plant_id/delete/:sch_id', authenticate, Us
     }
 })
 
-
-// function duplicateCheck (req, res, check) {
-//     const {type} = req.body;
-//     const {id} = req.params;
-
-//     try{
-       
-//     }catch(error){
-//         res.status(500).json({error:"could not delete plant"})
-//     }
-// }
 
 
 router.get('/trial', (req, res) =>{

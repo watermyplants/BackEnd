@@ -45,16 +45,7 @@ function getUserBy(filter){
 
 async function getPlants(id){
     return db('plants').where({user_id: id});
-    // return db('users as u')
-    //   .innerJoin('plants as p', 'p.user_id', 'u.id')
-    // //  .select('p.name', 'p.type','p.location','s.water_schedule')
-    // .where({user_id: id})
-    // // return db('schedule as s')
-    // //  .innerJoin('users as u', 'u.id', 's.user_id')
-    // //  .innerJoin('plants as p', 'p.id', 's.plant_id' )
-    // //  .select('s.water_schedule')
-    // // .where({plant_id: id})
- }
+}
 
 
  function getScedules(plantId){
@@ -78,9 +69,9 @@ function findPlantBy(filter){
 
 
 
-function getPlant(id){
+function getPlant(filter){
    return db('plants').first()
-        .where({id}).then(plant =>{
+        .where({filter}).then(plant =>{
             if(plant){
                 return plant
             }else{

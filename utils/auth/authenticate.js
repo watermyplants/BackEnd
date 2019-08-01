@@ -8,7 +8,8 @@ const jwtKey = secret.jwtSecret;
 
 module.exports = {
   authenticate,
-  UserOwnsPlant
+  UserOwnsPlant,
+  duplicateCheck
 }
 
 
@@ -50,4 +51,30 @@ function authenticate(req, res, next) {
         }
         next()
     }
+}
+
+
+
+async function duplicateCheck (req, res, next) {
+  const {type} = req.body;
+  const {id} = req.params;
+
+  
+  try{
+      const plants = await db('plants').where({user_id:id})
+      const found =  plants.filter(plant => plant.type === type);
+    
+
+      if(found.length === 0){
+
+          next()
+      }else{
+          
+          res.status(400).json(`type ${type} already exists`)
+      }
+
+     
+  }catch(error){
+      res.status(500).json({error:"could not delete plantsssss"})
+  }
 }
