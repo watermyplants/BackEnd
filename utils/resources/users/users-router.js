@@ -1,25 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const Users = require('./user-model');
+const db = require('../../data/dbConfig')
 
-const {authenticate} = require('../../auth/authenticate')
+const {authenticate, UserOwnsPlant} = require('../../auth/authenticate')
 
 
 
 router.use(express.json());
 
-
-
-
-//write middleware to check id user exist
-//write middleware to check id user exist
-//write middleware to check id user exist
-//write middleware to check id user exist
-//write middleware to check id user exist
-//write middleware to check id user exist
-//write middleware to check id user exist
-//write middleware to check id user exist
-//write middleware to check id user exist
 
 
 router.get('/', (req, res) =>{
@@ -29,14 +18,18 @@ router.get('/', (req, res) =>{
 
 
 router.get('/dashboard/:id', authenticate, async (req,res) =>{
+
     const {id} = req.params
 
     if(!id){
         res.status(404).json({message:"Please provide an id"})
     }else{
         try{
-            const user = await Users.getPlants(id)
-            res.status(200).json(user)
+            
+            const plants = await Users.getPlants(id);
+            
+           // const schedules = await Users.getScedules()
+            res.status(200).json(plants)
         }catch(error){
             res.status(500).json(error)
         }
@@ -44,15 +37,11 @@ router.get('/dashboard/:id', authenticate, async (req,res) =>{
     
 });
 
-router.get('/dashboard/:id/my_plant/:plant_id', authenticate, async (req,res) =>{
+router.get('/dashboard/:id/my_plant/:plant_id', authenticate, UserOwnsPlant, async (req,res) =>{
     const {plant_id}= req.params;
     try{
-        if(!plant_id){
-            res.status(404).json({error:"plant id missing"})
-        }else{
             const plant = await Users.getPlant(plant_id);
             res.status(200).json(plant)
-        }
 
     }catch(error){
         res.status(500).json({error:"could not retreive plant"})
@@ -83,7 +72,11 @@ router.post('/login', async (req, res)=>{
             const user = await Users.login(req.body);
             if(user){
                 res.status(200).json(user)
+            }else{
+
+                res.status(200).json({message:"incorrect username or password"})
             }
+            
             
         }catch(error){
             res.status(500).json({error:"could not login"})
@@ -110,7 +103,7 @@ router.post('/dashboard/:id/plants/add', authenticate, async (req, res)=>{
 });
 
 
-router.post('/dashboard/:id/my_plant/:plant_id/add_schedule', async (req, res)=>{
+router.post('/dashboard/:id/my_plant/:plant_id/add_schedule', authenticate, UserOwnsPlant, async (req, res)=>{
     const {water_schedule} = req.body;
     const {id,plant_id} = req.params;
 
@@ -130,7 +123,7 @@ router.post('/dashboard/:id/my_plant/:plant_id/add_schedule', async (req, res)=>
     }
 })
 
-router.put('/dashboard/:id/my_plant/:plant_id/update',authenticate, async (req,res) =>{
+router.put('/dashboard/:id/my_plant/:plant_id/update',authenticate, UserOwnsPlant, async (req,res) =>{
     const {plant_id} = req.params;
     try{
         const updated = await Users.updatePlant(req.body, plant_id);
@@ -157,9 +150,8 @@ router.put('/dashboard/:id/user_settings',authenticate, async (req,res) =>{
 })
 
 
-router.delete('/dashboard/:id/my_plant/:plant_id/remove', authenticate, async (req,res) =>{
+router.delete('/dashboard/:id/my_plant/:plant_id/remove', authenticate, UserOwnsPlant, async (req,res) =>{
     const {plant_id} =  req.params;
-    console.log(plant_id)
     try{
         const remove = await Users.deletePlant(plant_id);
         res.status(200).end()
@@ -169,79 +161,156 @@ router.delete('/dashboard/:id/my_plant/:plant_id/remove', authenticate, async (r
     }
 })
 
-router.delete('/dashboard/:id/my_plant/:plant_id/add_schedule', authenticate, async (req,res) =>{
-    const {plant_id} =  req.params;
-    console.log(plant_id)
-    try{
-        const remove = await Users.deletePlant(plant_id);
-        res.status(200).end()
+// router.post('/dashboard/:id/my_plant/:plant_id/add_schedule', authenticate, UserOwnsPlant, async (req,res) =>{
+//     const {plant_id} =  req.params;
+//     try{
+//         const remove = await Users.deletePlant(plant_id);
+//         res.status(200).end()
         
-    }catch(error){
-        res.status(500).json({error:"could not delete plant"})
-    }
-})
+//     }catch(error){
+//         res.status(500).json({error:"could not delete plant"})
+//     }
+// })
+
+
+// function duplicateCheck (req, res, check) {
+//     const {type} = req.body;
+//     const {id} = req.params;
+
+//     try{
+       
+//     }catch(error){
+//         res.status(500).json({error:"could not delete plant"})
+//     }
+// }
+
 
 router.get('/trial', (req, res) =>{
 
-    console.log(new Date())
-    console.log(new Date().getDay())
-    console.log(new Date().getFullYear())
-    console.log(new Date().getMonth())
-    console.log(new Date().getDate())
-    console.log(new Date().getTime()) /// retuns long interger
-    console.log(Date.now()) /// retuns long interger
-    //console.log(Date().getTime())
+//     console.log(new Date())
+//     console.log(new Date().getDay())
+//     console.log(new Date().getFullYear())
+//     console.log(new Date().getMonth())
+//     console.log(new Date().getDate())
+//     console.log(new Date().getTime()) /// retuns long interger
+//     console.log(Date.now()) /// retuns long interger
+//     //console.log(Date().getTime())
 
 
 
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
+//     const monthNames = ["January", "February", "March", "April", "May", "June",
+//   "July", "August", "September", "October", "November", "December"
+// ];
 
-    console.log(monthNames[new Date().getMonth()])
+//     console.log(monthNames[new Date().getMonth()])
     
-    const nextMonth = new Date().getMonth() + 1;
-    console.log(monthNames[nextMonth])
+//     const nextMonth = new Date().getMonth() + 1;
+//     console.log(monthNames[nextMonth])
 
 
-    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "June",
-  "Friday", "Saturday"];
+//     const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "June",
+//   "Friday", "Saturday"];
 
 
-  const tryAgainst = 9;
-  //if(tryAgainst > )
+//   const tryAgainst = 9;
+//   //if(tryAgainst > )
 
-  const currentDay = dayNames[new Date().getDay() + 7]
-  console.log(currentDay);
-
-
-  let d = new Date("August 8, 2019 00:00:00");
-  let n = d.getTime();
-  console.log(n)
-
-  const milsec= 86400000
-  const intval = 3 ;
-  const schedule = milsec * intval;
-  console.log(schedule)
-
-  const waterOn = new Date( new Date().getTime() + schedule);
-  console.log(waterOn)
-
-//   let newf = {...dayNames, name:'GerDay'};
-  dayNames.push('Gerday');
-
-  console.log(dayNames);
+//   const currentDay = dayNames[new Date().getDay() + 7]
+//   console.log(currentDay);
 
 
+//   let d = new Date("August 8, 2019 00:00:00");
+//   let n = d.getTime();
+//   console.log(n)
 
-  var dated = new Date();
-dated.setDate(d.getDate() + ((5 + 7 - d.getDay()) % 7) -7 );
-console.log(dated);
+//   const milsec= 86400000
+//   const intval = 3 ;
+//   const schedule = milsec * intval;
+//   console.log(schedule)
+
+//   const waterOn = new Date( new Date().getTime() + schedule);
+//   console.log(waterOn)
+
+// //   let newf = {...dayNames, name:'GerDay'};
+//   dayNames.push('Gerday');
+
+//   console.log(dayNames);
 
 
-let daySelected0
 
-    res.status(200).json({mesage:"trial"})
+//   var dated = new Date();
+// dated.setDate(d.getDate() + ((5 + 7 - d.getDay()) % 7) -7 );
+// console.log(dated);
+
+
+// let daySelected0
+
+//////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// const check = 'string, more, gas';
+// const newCheck = check.split(',')
+
+// console.log(newCheck.length)
+// console.log(newCheck)
+
+// // for(i=0; i<newCheck.length; i++){
+// //     console.log(newCheck[i].replace(',', '').trim())
+// // }
+
+// newCheck.map(day =>{
+//     console.log(day.trim())
+// })
+
+// console.log(newCheck.toString())
+// ///////////////////////////////////////////////////
+// ////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////
+
+// console.log(new Date('December 16, 1976 00:00:00'))
+// console.log(new Date().getTime())
+// console.log(new Date('August 01, 2019').getTime())
+
+// console.log(new Date('December 15, 1976').getTime())
+// console.log(Date.parse(new Date('December 16, 1976')))
+// console.log(Date.parse(new Date('December 16, 1976 00:00:01')))
+
+// console.log('/////////////////////////////')
+// const dayInMi = 86400000;
+// const days = 1;
+// const date = 'December 16, 1976';
+// console.log(date)
+// console.log(new Date(date));
+// console.log(new Date(date).getTime());
+// const nextday = new Date(date).getTime() + (dayInMi * days)
+// console.log(nextday)
+// console.log(new Date(nextday))
+
+
+// const chosen = []
+
+// const milisec = 86400000;
+// const intervals = 3;
+// let startDate = 'January 01, 2019';
+
+// console.log('///////////////////////')
+// console.log(startDate)
+// console.log('///////////////////////')
+
+// for(i=0; i<intervals; i++){
+
+//     let daySelected = new Date(startDate);
+    
+//     var nextDay = new Date(daySelected);
+//     nextDay.setDate(daySelected.getDate() + i);
+//     console.log(nextDay); // May 01 2000 
+// }
+
+
+
+
+//     res.status(200).json({mesage:"trial"})
 })
 
 
@@ -253,60 +322,4 @@ module.exports = router;
 
 
 
-
-// exports.up = function(knex) {
-//     return knex.schema
-//     .dropTableIfExists('users').createTable('users', tbl =>{
-//         tbl.increments();
-  
-//         tbl.string('username', 255).unique().notNullable();
-  
-//         tbl.string('password', 255).notNullable();
-  
-//         tbl.string('phone', 255)
-//           .notNullable();
-  
-  
-//     })
-//     .dropTableIfExists('plants').createTable('plants', tbl =>{
-//       tbl.increments();
-  
-//       tbl.string('name', 255).notNullable();
-//       tbl.string('type', 255).unique().notNullable();
-//       tbl.string('location', 255).notNullable();
-  
-//       tbl.integer('user_id', 255).notNullable()
-//           .references('id').inTable('users')
-//           .onUpdate('CASCADE')
-//         .onDelete('CASCADE');
-//     })
-  
-//     .dropTableIfExists('schedule').createTable('schedule', tbl =>{
-//       tbl.increments();
-  
-//       tbl.integer('plant_id')
-//         .notNullable()
-//         .references('id')
-//         .inTable('plants')
-//         .onUpdate('CASCADE')
-//         .onDelete('CASCADE');
-        
-//       tbl.integer('user_id')
-//         .notNullable()
-//         .references('id')
-//         .inTable('users')
-//         .onUpdate('CASCADE')
-//         .onDelete('CASCADE');
-  
-//       tbl.string('water_schedule')
-//         .notNullable();
-//     })
-//   };
-  
-//   exports.down = function(knex) {
-//     return knex.schema
-//     .dropTableIfExists('users')
-//     .dropTableIfExists('plants')
-//     .dropTableIfExists('schedule');
-//   };
   

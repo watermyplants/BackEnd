@@ -17,7 +17,9 @@ module.exports = {
     updatePlant,
     deletePlant,
     updateUser,
-    addSchedule
+    addSchedule,
+    getScedules,
+    findPlantBy
 }
 
 
@@ -40,15 +42,22 @@ function getUserBy(filter){
 
 
 
-function getPlants(id){
-    // return db('plants')
+async function getPlants(id){
+    return db('plants').where({user_id: id});
+    // return db('users as u')
+    //   .innerJoin('plants as p', 'p.user_id', 'u.id')
+    // //  .select('p.name', 'p.type','p.location','s.water_schedule')
     // .where({user_id: id})
+    // // return db('schedule as s')
+    // //  .innerJoin('users as u', 'u.id', 's.user_id')
+    // //  .innerJoin('plants as p', 'p.id', 's.plant_id' )
+    // //  .select('s.water_schedule')
+    // // .where({plant_id: id})
+ }
 
-    return db('plants as p')
-     .innerJoin('users as u', 'u.id', 'p.user_id')
-     //.leftJoin('schedule as s', 's.plant_id', 'p.id' )
-     .select('p.name', 'p.type')
-    .where({user_id: id})
+
+ function getScedules(plantId){
+     return db('schedule').where({plant_id: plantId})
  }
 
 function getUsers(){
