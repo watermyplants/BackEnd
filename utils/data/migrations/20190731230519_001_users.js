@@ -52,7 +52,7 @@ exports.up = function(knex) {
   
   exports.down = function(knex) {
     return knex.schema
-    .dropTableIfExists('users')
+    .dropTableIfExists('schedule')
     .dropTableIfExists('plants')
-    .dropTableIfExists('schedule');
+    .dropTableIfExists('users');
   };

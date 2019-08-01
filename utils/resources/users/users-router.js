@@ -161,14 +161,14 @@ router.delete('/dashboard/:id/my_plant/:plant_id/remove', authenticate, UserOwns
     }
 })
 
-router.post('/dashboard/:id/my_plant/:plant_id/delete_schedule.sch_id', authenticate, UserOwnsPlant, async (req,res) =>{
-    const {plant_id} =  req.params;
+router.post('/dashboard/:id/my_plant/:plant_id/delete/:sch_id', authenticate, UserOwnsPlant, async (req,res) =>{
+    const schedule_id =  req.params.sch_id;
     try{
-        const remove = await Users.deleteSchedule(plant_id);
+        const remove = await Users.deleteSchedule(schedule_id);
         res.status(200).end()
         
     }catch(error){
-        res.status(500).json({error:"could not delete plant"})
+        res.status(500).json({error:"could not schedule"})
     }
 })
 

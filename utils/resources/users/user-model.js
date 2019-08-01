@@ -19,7 +19,8 @@ module.exports = {
     updateUser,
     addSchedule,
     getScedules,
-    findPlantBy
+    findPlantBy,
+    deleteSchedule
 }
 
 
@@ -187,4 +188,9 @@ async function updateUser(data, id){
 // DELETES
 async function deletePlant(id){
     return await db('plants').where({id}).del();
+}
+
+
+async function deleteSchedule(id){
+    return await db('schedule').where({id}).del();
 }
