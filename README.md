@@ -8,16 +8,33 @@
 
 
 #Instructions
-**  Pl  **
+
+**Project Steps**
+
+- [ ] Create a forked copy of this project
+
+- [ ] Submit a pull request to merge <firstName-lastName> branch into master.
+
+# Yarn or NPM
+
+- [ ] cd into projects root directory npm i or yarn intall to retreive  dependencies.
+
+- [ ] RUN `npm run server` or `yarn start` to run your React application
 
 
-## Project Steps
+- [ ] GIT commit your first initial git to your repository. **commit often**
+
+
+# Deploy to Heroku
+
+
+# Testing
+Usee Jest to unit test your end points
 
 
 
 ## Minimum Viable Product
-
-
+- [ ] CRUD create , read, update, and destroy endpoints and functionality
 
 ## end points
 | POST   | /register | Creates a `user` using the information sent inside the `body` of the request. **Hashing the password** before saving the user to the database.
